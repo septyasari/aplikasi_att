@@ -1,0 +1,25 @@
+.breadcrumb {
+  background: transparent;
+  padding: 0;
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+
+.breadcrumb-item + .breadcrumb-item::before {
+  padding-left: 1.5rem;
+  padding-right: 1.5rem;
+}
+
+.breadcrumb-item.active {
+  color: #0c0d36;
+  font-weight: 400;
+}
+
+.breadcrumb-item a {
+  color: #979797;
+}
+
+table {
+  font-size: 14px;
+}
+/*# sourceMappingURL=main.css.map */
