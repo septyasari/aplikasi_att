@@ -1,4 +1,9 @@
 <?php
+
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
+
 defined('BASEPATH') or exit('No direct script access allowed');
 
 class Gardu extends CI_Controller
@@ -401,16 +406,54 @@ class Gardu extends CI_Controller
 
   public function export($id)//export inspeksi
   {
-    $data['pelaksana'] = $this->M_gardu->getDataPelaksanaById($id);
-    $data['pemeriksa'] = $this->M_gardu->getDataPeriksaById($id);
-    $data['pemerhatikan'] = $this->M_gardu->getDataPemerhatikanById($id);
-    $data['nhfuse'] = $this->M_gardu->getDataNHFUSEById($id);
-    $data['beban'] = $this->M_gardu->getDataBebanById($id);
-    $data['bebanreal'] = $this->M_gardu->getDataBebanRealById($id);
-    $data['hslpengukuran'] = $this->M_gardu->getDataPengukuranById($id);
-    $data['induk'] = $this->M_gardu->getDataIndukById($id);
-    $data['penyeimbang'] = $this->M_gardu->getDataPenyeimbanganById($id);
-    $this->load->view('gardu/vw_exportdata', $data);
+	  $spreadsheet = new Spreadsheet();
+
+	  // isi data
+	  $sheet = $spreadsheet->getActiveSheet();
+
+	  $sheet->setCellValue('A1', 'Logo');
+	  $sheet->mergeCells('A1:A2', Worksheet::MERGE_CELL_CONTENT_MERGE);
+
+	  $sheet->setCellValue('B1', 'PT. PLN (Persero) UIW Riau & Kepri UP3 Tanjungpinang ULP Tanjungpinang Kota');
+	  $sheet->mergeCells('B1:B2', Worksheet::MERGE_CELL_CONTENT_MERGE);
+
+	  $sheet->setCellValue('C1', 'LAPORAN PELAKSANAAN PEMERIKSAAN RUTIN GARDU DISTRIBUSI TRAFO 3 PHASA');
+	  $sheet->mergeCells('C1:C2', Worksheet::MERGE_CELL_CONTENT_MERGE);
+
+	  $sheet->setCellValue('D1', 'Title');
+	  $sheet->setCellValue('D1', 'Title');
+	  $sheet->setCellValue('D2', 'Title');
+
+	  $sheet->setCellValue('E2', 'Title');
+	  $sheet->mergeCells('D1:E1', Worksheet::MERGE_CELL_CONTENT_MERGE);
+
+	  $sheet->setCellValue('A3', 'Title');
+	  $sheet->mergeCells('A3:C3', Worksheet::MERGE_CELL_CONTENT_MERGE);
+
+	  $sheet->setCellValue('D3', 'Title');
+	  $sheet->mergeCells('D3:E3', Worksheet::MERGE_CELL_CONTENT_MERGE);
+
+	  // download file
+	  $writer = new Xlsx($spreadsheet);
+
+	  $filename = 'name-of-the-generated-file';
+
+	  header('Content-Type: application/vnd.ms-excel');
+	  header('Content-Disposition: attachment;filename="'. $filename .'.xlsx"');
+	  header('Cache-Control: max-age=0');
+
+	  $writer->save('php://output');
+
+//    $data['pelaksana'] = $this->M_gardu->getDataPelaksanaById($id);
+//    $data['pemeriksa'] = $this->M_gardu->getDataPeriksaById($id);
+//    $data['pemerhatikan'] = $this->M_gardu->getDataPemerhatikanById($id);
+//    $data['nhfuse'] = $this->M_gardu->getDataNHFUSEById($id);
+//    $data['beban'] = $this->M_gardu->getDataBebanById($id);
+//    $data['bebanreal'] = $this->M_gardu->getDataBebanRealById($id);
+//    $data['hslpengukuran'] = $this->M_gardu->getDataPengukuranById($id);
+//    $data['induk'] = $this->M_gardu->getDataIndukById($id);
+//    $data['penyeimbang'] = $this->M_gardu->getDataPenyeimbanganById($id);
+//    $this->load->view('gardu/vw_exportdata', $data);
   }
 
   // for view data edit inspeksi controller
@@ -445,7 +488,7 @@ class Gardu extends CI_Controller
 
   public function editinspeksi()
   {
-    
+
     if($this->input->post('data') == "pelaksana" )
     {
       $id = $this->input->post('id');
@@ -463,11 +506,11 @@ class Gardu extends CI_Controller
       $this->M_gardu->update_pelaksana($datapelaksana, $id);
 
       $this->session->set_flashdata('message_data', '<div class="alert alert-success alert-dismissible fade show" role="alert" id="success-alert">Data Pelaksana Berhasil Diedit<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
-      
-    
+
+
       redirect('gardu/edit/'.$id);
     }
-    
+
 
     if($this->input->post('data')== "trafo")
     {
@@ -484,7 +527,7 @@ class Gardu extends CI_Controller
         'berattotal' => $this->input->post('berattotal')
       );
 
-      
+
 
       $this->M_gardu->update_trafo($datatrafo, $id_gardu);
 
@@ -515,10 +558,10 @@ class Gardu extends CI_Controller
       var_dump($this->input->post('check[]'));
 
     }
-    
-    
+
+
   }
-    
+
 
   function delete()//hapus inspeksi
     {
@@ -641,7 +684,7 @@ class Gardu extends CI_Controller
   {
     $data['gangguan'] = $this->M_gardu->getGangguanById($id);
     $this->load->view('gardu/vw_exportdatagangguan', $data);
-  }  
+  }
 
   function deletegangguan()
   {
@@ -696,7 +739,7 @@ class Gardu extends CI_Controller
 
 				$this->db->insert('tb_gambar', $dataGambar);
       }
-      
+
       $this->session->set_flashdata('message_proses', '<div class="alert alert-success" role="alert">
       Data gambar berhasil di tambahkan.
       </div>');
