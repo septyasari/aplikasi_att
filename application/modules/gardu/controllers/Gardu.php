@@ -121,21 +121,18 @@ class Gardu extends CI_Controller
 
     } else {
 
-      if(isset($_POST['save']))
-        {
-          $id_gardu = $this->input->post('id_gardu');//Pass the userid here
-          $checkbox = $_POST['check'];
-          for($i=0;$i<count($checkbox);$i++){
-            $bidangyangdiperiksa = $checkbox[$i];
-            $this->M_gardu->insert_pemeriksaan($id_gardu, $bidangyangdiperiksa);//Call the modal
+      $id_gardu = $this->input->post('id_gardu');//Pass the userid here
+      $checkbox = $_POST['check'];
+      for($i=0;$i<count($checkbox);$i++){
+        $bidangyangdiperiksa = $checkbox[$i];
+        $this->M_gardu->insert_pemeriksaan($id_gardu, $bidangyangdiperiksa);//Call the modal
 
-          }
-          $this->session->set_flashdata('message_pemeriksa', '<div class="alert alert-success" role="alert">
-          Data Pemeriksaan Berhasil Diinput.
-          </div>');
+      }
+      $this->session->set_flashdata('message_pemeriksa', '<div class="alert alert-success" role="alert">
+      Data Pemeriksaan Berhasil Diinput.
+      </div>');
 
-        redirect('gardu/tambahData');
-        }
+      redirect('gardu/tambahData');
     }
 
   }
@@ -702,4 +699,24 @@ class Gardu extends CI_Controller
       </div>');
       redirect('gardu/tambahData');
     }
+
+  public function tambah_keterangan()
+  {
+    // $data = [
+    //   'id_gardu' => $this->input->post('id_gardu'),
+    //   'gambar' => $this->input->post('gambar')
+    // ];
+    if($_REQUEST['img_submit']){
+      echo "kamu berhasil upload gambar";
+    } elseif (isset($_REQUEST['ket_submit'])) {
+      echo "Tambah Keteraangan nya berhasil";
+    }
+    echo "<pre>";
+    var_dump($_POST);
+    var_dump($_REQUEST);
+    die;
+  }
+  public function echo_aja() {
+    echo "hai ini gambar";
+  }
 }
